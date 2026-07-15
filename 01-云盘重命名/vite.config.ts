@@ -17,6 +17,7 @@ const repositoryUrl = 'https://github.com/ASHUHUDA/WebJS'
 const sourceUrl = `${repositoryUrl}/tree/main/01-%E4%BA%91%E7%9B%98%E9%87%8D%E5%91%BD`
 const rawScriptUrl = 'https://raw.githubusercontent.com/ASHUHUDA/WebJS/main/01-%E4%BA%91%E7%9B%98%E9%87%8D%E5%91%BD'
 const rawDistUrl = `${rawScriptUrl}/dist`
+const iconUrl = `data:image/svg+xml;base64,${fs.readFileSync(path.resolve(__dirname, 'public/favicon.svg')).toString('base64')}`
 
 export default defineConfig({
   resolve: {
@@ -46,7 +47,7 @@ export default defineConfig({
         license: 'MIT',
         name: '云盘重命名助手',
         description: `批量重命名云盘里的文件，支持${providers.map(p => p.DRIVE_NAME).join('、')}`,
-        icon: `${rawScriptUrl}/public/favicon.svg`,
+        icon: iconUrl,
         grant: 'none',
         match: providers.flatMap(p => p.HOSTS.map(host => `https://${host}/*`)),
         downloadURL: `${rawDistUrl}/cloud-drive-renamer.user.js`,

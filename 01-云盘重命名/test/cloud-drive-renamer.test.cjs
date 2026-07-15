@@ -6,6 +6,7 @@ const test = require('node:test')
 const distDirectory = path.resolve(__dirname, '..', 'dist')
 const userPath = path.join(distDirectory, 'cloud-drive-renamer.user.js')
 const metaPath = path.join(distDirectory, 'cloud-drive-renamer.meta.js')
+const iconPath = path.resolve(__dirname, '..', 'public', 'favicon.svg')
 const source = fs.readFileSync(userPath, 'utf8')
 const metadata = fs.readFileSync(metaPath, 'utf8')
 
@@ -26,6 +27,16 @@ test('emits the public 2.0.0 artifacts and update metadata', () => {
   assert.equal(
     metadataValues('updateURL')[0],
     'https://raw.githubusercontent.com/ASHUHUDA/WebJS/main/01-%E4%BA%91%E7%9B%98%E9%87%8D%E5%91%BD/dist/cloud-drive-renamer.meta.js',
+  )
+})
+
+test('embeds the script icon without remote resource fetches', () => {
+  const [icon] = metadataValues('icon')
+  const prefix = 'data:image/svg+xml;base64,'
+  assert.ok(icon.startsWith(prefix))
+  assert.equal(
+    Buffer.from(icon.slice(prefix.length), 'base64').toString('utf8'),
+    fs.readFileSync(iconPath, 'utf8'),
   )
 })
 
