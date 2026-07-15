@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '01-云盘重命名/**'
+      - '.github/workflows/**'
+      - '.node-version'
+      - '.nvmrc'
+  pull_request:
+    paths:
+      - '01-云盘重命名/**'
+      - '.github/workflows/**'
+      - '.node-version'
+      - '.nvmrc'
+
+jobs:
+  drive-renamer:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 01-云盘重命名
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: 01-云盘重命名/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run lint
+      - run: pnpm run typecheck
+      - run: pnpm test
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm run test:e2e
+      - run: pnpm run build
+      - run: pnpm run test:dist
+      - run: node --check dist/cloud-drive-renamer.user.js
+      - run: node --check dist/cloud-drive-renamer.meta.js

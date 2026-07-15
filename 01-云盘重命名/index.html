@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>云盘重命名助手 - 开发预览</title>
+  <meta name="description" content="云盘重命名助手本地开发预览">
+</head>
+<body>
+  <main>
+    <header>
+      <strong>Mock 云盘</strong>
+      <div id="drive-renamer-dev-toolbar"></div>
+    </header>
+    <section aria-label="Mock 文件区"></section>
+  </main>
+  <noscript>
+    <div>Please enable JavaScript to use this application.</div>
+  </noscript>
+  <style>
+    body { margin: 0; color: #1f2937; font: 14px system-ui, sans-serif; background: #f3f4f6; }
+    main { min-height: 100vh; background: #fff; }
+    header { display: flex; height: 64px; align-items: center; justify-content: space-between; padding: 0 28px; border-bottom: 1px solid #e5e7eb; }
+    section { height: calc(100vh - 65px); background: linear-gradient(#fff 47px, #f1f5f9 48px); background-size: 100% 48px; }
+  </style>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+.DS_Store
+.vite-ssg-dist
+.vite-ssg-temp
+*.local
+node_modules
+.idea/
+*.log
+dist/*
+!dist/cloud-drive-renamer.user.js
+!dist/cloud-drive-renamer.meta.js

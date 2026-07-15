@@ -1,0 +1,9 @@
+.omx/
+**/node_modules/
+**/.vite/
+**/coverage/
+**/playwright-report/
+**/test-results/
+**/*.log
+**/*.local
+# Each script explicitly allowlists its distributable artifacts.

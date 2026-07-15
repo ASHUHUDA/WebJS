@@ -1,0 +1,6 @@
+* text=auto eol=lf
+
+*.user.js text eol=lf
+*.meta.js text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf

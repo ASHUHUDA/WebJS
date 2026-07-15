@@ -1,0 +1,261 @@
+import type { FileResource } from '~/types'
+
+export function findRegExpLiteralEnd(input: string) {
+  if (!input.startsWith('/'))
+    return -1
+
+  let escaped = false
+  let inCharacterClass = false
+  for (let i = 1; i < input.length; i++) {
+    const char = input[i]
+    if (escaped)
+      escaped = false
+    else if (char === '\\')
+      escaped = true
+    else if (char === '[')
+      inCharacterClass = true
+    else if (char === ']')
+      inCharacterClass = false
+    else if (char === '/' && !inCharacterClass)
+      return i
+  }
+  return -1
+}
+
+export function createRenameRegExp(input: string) {
+  const literalEnd = findRegExpLiteralEnd(input)
+  if (literalEnd === -1)
+    return new RegExp(input)
+  return new RegExp(input.slice(1, literalEnd), input.slice(literalEnd + 1))
+}
+
+export function getNewNameByExp(oldName: string, regexp: RegExp, replacement: string) {
+  regexp.lastIndex = 0
+  try {
+    return oldName.replace(regexp, replacement)
+  }
+  finally {
+    regexp.lastIndex = 0
+  }
+}
+
+export function isUsableNewName(name: unknown): boolean {
+  return typeof name === 'string'
+    && name.trim() !== ''
+    && name !== '.'
+    && name !== '..'
+    && !/[\\/\0\r\n]/.test(name)
+}
+
+export function getRenameConflictFileIds(
+  items: Array<Pick<FileResource, 'file_id' | 'name'>>,
+  renameEntries: Array<readonly [string, string]>,
+) {
+  const result = new Set<string>()
+  const firstTargetOwner = new Map<string, string>()
+  const currentNameOwners = new Map<string, string[]>()
+
+  for (const item of items) {
+    const owners = currentNameOwners.get(item.name)
+    if (owners)
+      owners.push(item.file_id)
+    else
+      currentNameOwners.set(item.name, [item.file_id])
+  }
+
+  for (const [fileId, newName] of renameEntries) {
+    const firstOwner = firstTargetOwner.get(newName)
+    if (firstOwner) {
+      result.add(firstOwner)
+      result.add(fileId)
+    }
+    else {
+      firstTargetOwner.set(newName, fileId)
+    }
+
+    for (const ownerId of currentNameOwners.get(newName) ?? []) {
+      if (ownerId !== fileId) {
+        result.add(fileId)
+        result.add(ownerId)
+      }
+    }
+  }
+
+  return result
+}
+
+const SeasonEpisodeExtract = /S(?:eason)?[._\- ]?(\d{1,3})(?:[._\- ]?E|[._\- ])(\d{1,3})(?!\d)/i
+const EpisodeExtract1 = /EP?(\d{1,3})(?!\d)/i
+const EpisodeExtract2 = /(?<![0-9h\u4E00-\u9FA5])(\d{1,3})(?!\d)(?![PK季])/i
+const EpisodeExtract3 = /(?<![0-9h])(\d{1,3})(?!\d)(?![PK季])/i
+
+interface EpisodeHelpers {
+  pre: string
+  post: string
+}
+
+export function getNewNameByExtract(
+  oldName: string,
+  prefix: string,
+  season: string,
+  epHelpers: EpisodeHelpers,
+  refName?: string,
+  offset?: string,
+  leadingZeroCount?: number,
+) {
+  let episode: string | undefined
+
+  if (epHelpers.pre || epHelpers.post)
+    episode = getEpisodeByHelpers(oldName, epHelpers, leadingZeroCount)
+
+  if (!episode && refName)
+    episode = getEpisodeByCompare(oldName, refName, leadingZeroCount)
+
+  if (!episode)
+    episode = getEpisode(oldName, leadingZeroCount)
+  // normalize season
+  season ||= '1'
+  const seasonNumber = Number.parseInt(season)
+  const seasonNumberIsValid = !Number.isNaN(seasonNumber) && seasonNumber < 100
+  season = String(seasonNumberIsValid ? seasonNumber : 1).padStart(2, '0')
+  if (!episode || !season)
+    return ''
+  // ext
+  const m = oldName.match(/(\.[a-z0-9]+)$/i)
+  episode = offsetEpisode(episode, offset, leadingZeroCount)
+  return `${prefix}${prefix.endsWith('.') ? '' : '.'}S${season}E${episode}${m ? m[1] : ''}`
+}
+
+function offsetEpisode(episodeStr: string, offset?: string, leadingZeroCount?: number): string {
+  const n = Number.parseInt(episodeStr)
+  return normalizeEpisode(String(n + (offset ? Number.parseInt(offset) : 0)), leadingZeroCount)
+}
+
+export function getEpisodeByCompare(oldName: string, refName: string, leadingZeroCount?: number): string | undefined {
+  const matchesO = [...oldName.matchAll(/\d+/g)].map(x => x[0])
+  const matchesR = [...refName.matchAll(/\d+/g)].map(x => x[0])
+  if (matchesO.length === 0 || matchesO.length !== matchesR.length)
+    return
+  const diff = []
+  for (let i = 0; i < matchesO.length; ++i) {
+    if (matchesO[i] !== matchesR[i])
+      diff.push(matchesO[i])
+  }
+  const filtered = diff.filter((x) => {
+    const n = Number.parseInt(x)
+    return !Number.isNaN(n) && n !== 0 && n < 1000
+  })
+  return filtered.length === 1 ? normalizeEpisode(filtered[0], leadingZeroCount) : undefined
+}
+
+function normalizeEpisode(x: string, leadingZeroCount = 3) {
+  return String(+x).padStart(leadingZeroCount, '0')
+}
+
+export function getEpisodeByHelpers(oldName: string, epHelpers: EpisodeHelpers, leadingZeroCount?: number) {
+  const { pre, post } = epHelpers
+  if (!pre && !post)
+    return
+  const preIndex = pre ? oldName.indexOf(pre) : 0
+  const postIndex = post ? oldName.lastIndexOf(post) : oldName.length
+  if (preIndex === -1 && postIndex === -1)
+    return
+  const shorted = oldName.slice(preIndex + pre.length, postIndex)
+  const parsed = Number.parseInt(getEpisode(shorted, leadingZeroCount))
+  if (Number.isInteger(parsed))
+    return normalizeEpisode(String(parsed), leadingZeroCount)
+}
+
+export function getEpisode(oldName: string, leadingZeroCount?: number) {
+  // trim ext
+  oldName = oldName.replace(/\.[a-z0-9]+$/i, '')
+
+  {
+    const [_, _s, episode] = oldName.match(SeasonEpisodeExtract) || []
+    if (episode)
+      return normalizeEpisode(episode, leadingZeroCount)
+  }
+
+  {
+    const [_, episode] = oldName.match(EpisodeExtract1) || []
+    if (episode)
+      return normalizeEpisode(episode, leadingZeroCount)
+  }
+
+  {
+    const [_, episode] = oldName.match(EpisodeExtract2) || []
+    if (episode)
+      return normalizeEpisode(episode, leadingZeroCount)
+  }
+
+  {
+    const [_, episode] = oldName.match(EpisodeExtract3) || []
+    if (episode)
+      return normalizeEpisode(episode, leadingZeroCount)
+  }
+
+  return '001'
+}
+
+export function getSeason(oldName: string) {
+  const [_, s] = oldName.match(SeasonEpisodeExtract) || []
+  return s
+}
+
+export function getLcstr(a: string, b: string) {
+  if (!a || !b)
+    return ''
+  const lenA = a.length
+  const lenB = b.length
+  let cache = [[], []] as number[][]
+  let maxLen = 0
+  let maxBEnd: number
+  for (let i = 0; i < lenA; i++)
+    cache[0][i] = a[0] === b[i] ? 1 : 0
+  for (let i = 1; i < lenA; i++) {
+    cache[1][0] = a[i] === b[0] ? 1 : 0
+    for (let j = 1; j < lenB; j++) {
+      cache[1][j] = a[i] === b[j] ? cache[0][j - 1] + 1 : 0
+      if (cache[1][j] > maxLen) {
+        maxLen = cache[1][j]
+        maxBEnd = j
+      }
+    }
+    cache = [cache[1], []]
+  }
+  return b.slice(maxBEnd! - maxLen + 1, maxBEnd! + 1)
+}
+
+export function guessSeason(list: FileResource[]) {
+  let currentSeason = '1'
+  list.forEach((v) => {
+    const temp = getSeason(v.name)
+    if (temp)
+      currentSeason = temp
+  })
+  return currentSeason
+}
+
+const Chinese = /([\u4E00-\u9FA5]+)/
+
+// 猜剧集名：
+// 1.如果有中文字符，则取中文字符
+// 2.否则取最长公共子串，并尝试把季集数去除
+export function guessPrefix(list: FileResource[]) {
+  if (list.length === 0)
+    return ''
+  const m = list[0].name.match(Chinese)
+  if (m?.[1])
+    return m[1]
+
+  if (list.length < 2) {
+    const s = list[0]
+    return s.name.replace(`.${s.file_extension}`, '').replace(/\s*S\d+E\d*|\s*E\d+/i, '').trim()
+  }
+  const [a, b] = list.slice(-2).map(x => x.name.replace(`.${x.file_extension}`, ''))
+  const lcs = getLcstr(a, b)
+  if (lcs)
+    return lcs.replace(/\s*S\d+E\d*|\s*E\d+/i, '').trim()
+
+  return ''
+}
