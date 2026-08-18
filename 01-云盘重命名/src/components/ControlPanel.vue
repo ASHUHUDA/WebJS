@@ -89,7 +89,7 @@ function fillRandomPrefix() {
     </div>
 
     <div class="status-area" aria-live="polite">
-      <p v-if="main.error" class="status error">
+      <p v-if="main.error" class="error status">
         {{ main.error }}
       </p>
       <p v-else-if="main.processData.total" class="status">

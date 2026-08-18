@@ -9,6 +9,11 @@ const userscriptPath = path.join(projectRoot, 'dist/cloud-drive-renamer.user.js'
 
 const fixtures = [
   {
+    name: '115网盘',
+    url: 'https://115.com/storage/netdisk?mode=wangpan&cid=0',
+    body: '<div style="display:flex;align-items:center;gap:8px"><button style="width:88px;height:36px">上传</button></div>',
+  },
+  {
     name: '123云盘',
     url: 'https://www.123pan.com/?homeFilePath=0',
     body: '<div id="app"><div class="homeClass"><div></div></div></div>',
@@ -38,6 +43,11 @@ const fixtures = [
     url: 'https://pan.quark.cn/#/list/all',
     body: '<div id="ice-container"><div class="ant-layout"><div class="section-header"><div class="btn-operate"><div class="btn-main"></div></div></div></div></div>',
   },
+  {
+    name: 'UC网盘',
+    url: 'https://drive.uc.cn/#/list/all',
+    body: '<div id="ice-container"><div class="ant-layout"><div class="section-header"><div class="btn-operate"><div class="btn-main"></div></div></div></div></div>',
+  },
 ]
 
 for (const fixture of fixtures) {
@@ -47,7 +57,7 @@ for (const fixture of fixtures) {
     await page.route('**/*', async (route) => {
       if (route.request().isNavigationRequest()) {
         await route.fulfill({
-          contentType: 'text/html',
+          contentType: 'text/html; charset=utf-8',
           body: `<!doctype html><html><body>${fixture.body}</body></html>`,
         })
       }

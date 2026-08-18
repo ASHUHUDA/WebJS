@@ -1,6 +1,6 @@
 # 云盘重命名助手
 
-云盘重命名助手是在网页端批量预览并重命名当前云盘目录条目的 userscript。当前 WebJS 版本为 `2.0.0`，支持 123云盘、阿里云盘、百度网盘、移动云盘、天翼云盘和夸克云盘。
+云盘重命名助手是在网页端批量预览并重命名当前云盘目录条目的 userscript。当前 WebJS 版本为 `2.0.0`，支持 115网盘、123云盘、阿里云盘、百度网盘、移动云盘、天翼云盘、夸克云盘和 UC网盘。
 
 ## 安装
 
@@ -73,10 +73,11 @@ node --check dist/cloud-drive-renamer.meta.js
 - 增加桌面双栏和窄屏分段视图、关闭按钮、运行锁定与列表错误状态。
 - UnoCSS 改用 `vue-scoped` 隔离，移除全局 reset、WebFonts、dayjs 和冗余动画。
 - 更新检查改用 GitHub Raw `.meta.js`，并增加 Vitest、Provider DOM、Playwright 和 dist 回归测试。
-- 增加六个平台最终 user.js 启动回归，防止开发 mock 掩盖 Provider 解析或产物注入问题。
+- 增加 115网盘、UC网盘上游 Provider，并同步 `sup` 字幕扩展支持。
+- 增加八个平台最终 user.js 启动回归，防止开发 mock 掩盖 Provider 解析或产物注入问题。
 
 ## 来源与许可
 
-本项目基于 [a1mersnow/drive-rename](https://github.com/a1mersnow/drive-rename) `1.4.4` 继续开发。上游作者为 a1mersnow，上游代码采用 MIT License；原版权和完整许可文本保留在本目录 [LICENSE](./LICENSE) 中。
+本项目基于 [a1mersnow/drive-rename](https://github.com/a1mersnow/drive-rename) `1.4.9` 继续开发。上游作者为 a1mersnow，上游代码采用 MIT License；原版权和完整许可文本保留在本目录 [LICENSE](./LICENSE) 中。
 
 2026-07-15 起的 WebJS 维护与新增内容由 ASHUHUDA 提供。使用本目录代码时，以本目录 MIT 许可和保留的上游版权声明为准。

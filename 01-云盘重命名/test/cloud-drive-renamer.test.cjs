@@ -40,8 +40,9 @@ test('embeds the script icon without remote resource fetches', () => {
   )
 })
 
-test('keeps the six-provider match contract', () => {
+test('keeps the eight-provider match contract', () => {
   assert.deepEqual(metadataValues('match'), [
+    'https://115.com/*',
     'https://www.123pan.com/*',
     'https://www.aliyundrive.com/*',
     'https://www.alipan.com/*',
@@ -49,6 +50,8 @@ test('keeps the six-provider match contract', () => {
     'https://yun.139.com/*',
     'https://cloud.189.cn/*',
     'https://pan.quark.cn/*',
+    'https://drive.uc.cn/*',
+    'https://pan.uc.cn/*',
   ])
 })
 
@@ -61,7 +64,7 @@ test('uses only the required runtime dependencies', () => {
 })
 
 test('stays within the userscript size and animation budgets', () => {
-  assert.ok(fs.statSync(userPath).size <= 125 * 1024)
+  assert.ok(fs.statSync(userPath).size <= 135 * 1024)
   assert.ok((source.match(/@keyframes/g) ?? []).length <= 3)
 })
 

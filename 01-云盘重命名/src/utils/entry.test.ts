@@ -1,12 +1,14 @@
 import type { ContainerInfo } from '~/types'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { shallowRef } from 'vue'
+import provider115 from '~/providers/115'
 import provider123 from '~/providers/123'
 import providerAliyun from '~/providers/aliyun'
 import providerBaidu from '~/providers/baidu'
 import providerCmcc from '~/providers/cmcc'
 import providerEsurfing from '~/providers/esurfing'
 import providerQuark from '~/providers/quark'
+import providerUc from '~/providers/uc'
 import { ensureEntryTarget, ENTRY_TARGET_ID } from './entry'
 
 const mock = vi.hoisted(() => ({
@@ -25,7 +27,28 @@ describe('provider entry containers', () => {
     [providerCmcc, '<div id="target" class="top_button"></div>', true],
     [providerEsurfing, '<div id="target" class="FileHead_file-head-left_fixture"></div>', true],
     [providerQuark, '<div id="ice-container"><div class="ant-layout"><div class="section-header"><div class="btn-operate"><div id="target" class="btn-main"></div></div></div></div></div>', true],
+    [providerUc, '<div id="ice-container"><div class="ant-layout"><div class="section-header"><div class="btn-operate"><div id="target" class="btn-main"></div></div></div></div></div>', true],
   ] as const
+
+  it('finds the unchanged toolbar for 115网盘', () => {
+    document.body.innerHTML = '<div id="target"><button>上传</button></div>'
+    const button = document.querySelector('button') as HTMLElement
+    vi.spyOn(button, 'getBoundingClientRect').mockReturnValue({
+      x: 16,
+      y: 16,
+      width: 88,
+      height: 36,
+      top: 16,
+      left: 16,
+      right: 104,
+      bottom: 52,
+      toJSON: () => {},
+    } as DOMRect)
+
+    const container = provider115.getContainer()
+    expect(container.el).toBe(document.querySelector('#target'))
+    expect(container.front).toBe(true)
+  })
 
   it.each(fixtures)('finds the unchanged toolbar for $DRIVE_NAME', (provider, html, front) => {
     document.body.innerHTML = html
