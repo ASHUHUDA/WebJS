@@ -5,7 +5,7 @@
 ## 安装
 
 1. 安装支持 userscript 的浏览器管理器，例如 Tampermonkey 或 Violentmonkey。
-2. 打开 [cloud-drive-renamer.user.js](https://raw.githubusercontent.com/ASHUHUDA/WebJS/main/01-%E4%BA%91%E7%9B%98%E9%87%8D%E5%91%BD/dist/cloud-drive-renamer.user.js)。
+2. 打开 [cloud-drive-renamer.user.js](https://raw.githubusercontent.com/ASHUHUDA/WebJS/main/01-%E4%BA%91%E7%9B%98%E9%87%8D%E5%91%BD%E5%90%8D/dist/cloud-drive-renamer.user.js)。
 3. 在管理器确认安装。后续更新通过体积更小的 `cloud-drive-renamer.meta.js` 检查。
 
 部分 Chrome 环境可能要求在“扩展程序 -> 管理扩展程序”中启用开发者模式。

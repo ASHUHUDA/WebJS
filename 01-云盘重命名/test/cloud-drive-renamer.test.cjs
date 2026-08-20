@@ -22,11 +22,11 @@ test('emits the public 2.0.0 artifacts and update metadata', () => {
   assert.equal(metadataValues('license')[0], 'MIT')
   assert.equal(
     metadataValues('downloadURL')[0],
-    'https://raw.githubusercontent.com/ASHUHUDA/WebJS/main/01-%E4%BA%91%E7%9B%98%E9%87%8D%E5%91%BD/dist/cloud-drive-renamer.user.js',
+    'https://raw.githubusercontent.com/ASHUHUDA/WebJS/main/01-%E4%BA%91%E7%9B%98%E9%87%8D%E5%91%BD%E5%90%8D/dist/cloud-drive-renamer.user.js',
   )
   assert.equal(
     metadataValues('updateURL')[0],
-    'https://raw.githubusercontent.com/ASHUHUDA/WebJS/main/01-%E4%BA%91%E7%9B%98%E9%87%8D%E5%91%BD/dist/cloud-drive-renamer.meta.js',
+    'https://raw.githubusercontent.com/ASHUHUDA/WebJS/main/01-%E4%BA%91%E7%9B%98%E9%87%8D%E5%91%BD%E5%90%8D/dist/cloud-drive-renamer.meta.js',
   )
 })
 

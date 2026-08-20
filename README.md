@@ -6,7 +6,7 @@ WebJS 是 ASHUHUDA 维护的多 userscript 仓库。每个脚本使用编号目�
 
 | 编号 | 脚本 | 版本 | 支持平台 | 安装 | 源码 |
 | --- | --- | --- | --- | --- | --- |
-| 01 | 云盘重命名助手 | 2.0.0 | 115网盘、123云盘、阿里云盘、百度网盘、移动云盘、天翼云盘、夸克云盘、UC网盘 | [安装 userscript](https://raw.githubusercontent.com/ASHUHUDA/WebJS/main/01-%E4%BA%91%E7%9B%98%E9%87%8D%E5%91%BD/dist/cloud-drive-renamer.user.js) | [01-云盘重命名](./01-云盘重命名/) |
+| 01 | 云盘重命名助手 | 2.0.0 | 115网盘、123云盘、阿里云盘、百度网盘、移动云盘、天翼云盘、夸克云盘、UC网盘 | [安装 userscript](https://raw.githubusercontent.com/ASHUHUDA/WebJS/main/01-%E4%BA%91%E7%9B%98%E9%87%8D%E5%91%BD%E5%90%8D/dist/cloud-drive-renamer.user.js) | [01-云盘重命名](./01-云盘重命名/) |
 
 ## 许可与来源
 

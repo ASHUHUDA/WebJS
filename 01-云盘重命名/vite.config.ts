@@ -14,8 +14,8 @@ interface StaticProvider {
 
 const providers = getStaticProviders()
 const repositoryUrl = 'https://github.com/ASHUHUDA/WebJS'
-const sourceUrl = `${repositoryUrl}/tree/main/01-%E4%BA%91%E7%9B%98%E9%87%8D%E5%91%BD`
-const rawScriptUrl = 'https://raw.githubusercontent.com/ASHUHUDA/WebJS/main/01-%E4%BA%91%E7%9B%98%E9%87%8D%E5%91%BD'
+const sourceUrl = `${repositoryUrl}/tree/main/01-%E4%BA%91%E7%9B%98%E9%87%8D%E5%91%BD%E5%90%8D`
+const rawScriptUrl = 'https://raw.githubusercontent.com/ASHUHUDA/WebJS/main/01-%E4%BA%91%E7%9B%98%E9%87%8D%E5%91%BD%E5%90%8D'
 const rawDistUrl = `${rawScriptUrl}/dist`
 const iconUrl = `data:image/svg+xml;base64,${fs.readFileSync(path.resolve(__dirname, 'public/favicon.svg')).toString('base64')}`
 
