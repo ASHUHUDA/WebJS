@@ -54,5 +54,6 @@ node --check dist/cloud-drive-renamer.meta.js
 
 - 优先最小改动并保留上游归属；不要手工修补 dist 代替修改源码。
 - 功能变更先跑最小验证，再跑完整链路和代码审查。
+- 每次可发布脚本更新必须同步更新版本号、根 README、脚本 README、dist metadata/user.js 和对应测试。
 - 关键行为变化同步更新本文件、根 README 和脚本 README；使用绝对日期记录版本事实。
 - 本地开发可使用 mock Provider；六个平台真人验证必须明确标为人工抽查，不能用 mock 结果替代。

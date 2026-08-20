@@ -1,6 +1,6 @@
 # 云盘重命名助手
 
-云盘重命名助手是在网页端批量预览并重命名当前云盘目录条目的 userscript。当前 WebJS 版本为 `2.0.0`，支持 115网盘、123云盘、阿里云盘、百度网盘、移动云盘、天翼云盘、夸克云盘和 UC网盘。
+云盘重命名助手是在网页端批量预览并重命名当前云盘目录条目的 userscript。当前 WebJS 版本为 `2.0.1`，支持 115网盘、123云盘、阿里云盘、百度网盘、移动云盘、天翼云盘、夸克云盘和 UC网盘。
 
 ## 安装
 
@@ -65,6 +65,10 @@ corepack.cmd pnpm run test:dist
 node --check dist/cloud-drive-renamer.user.js
 node --check dist/cloud-drive-renamer.meta.js
 ```
+
+## 2.0.1 变更（2026-08-20）
+
+- 修复 GitHub Raw 安装、更新和源码链接中的目录编码，确保 README 点击安装能找到脚本文件。
 
 ## 2.0.0 变更
 

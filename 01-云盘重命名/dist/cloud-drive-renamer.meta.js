@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         云盘重命名助手
 // @namespace    https://github.com/ASHUHUDA/WebJS
-// @version      2.0.0
+// @version      2.0.1
 // @author       ASHUHUDA
 // @description  批量重命名云盘里的文件，支持115网盘、123云盘、阿里云盘、百度网盘、移动云盘、天翼云盘、夸克云盘、UC网盘
 // @license      MIT

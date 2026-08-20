@@ -15,9 +15,9 @@ function metadataValues(key) {
   return [...metadata.matchAll(pattern)].map(match => match[1].trim())
 }
 
-test('emits the public 2.0.0 artifacts and update metadata', () => {
+test('emits the public 2.0.1 artifacts and update metadata', () => {
   assert.equal(metadataValues('name')[0], '云盘重命名助手')
-  assert.equal(metadataValues('version')[0], '2.0.0')
+  assert.equal(metadataValues('version')[0], '2.0.1')
   assert.equal(metadataValues('author')[0], 'ASHUHUDA')
   assert.equal(metadataValues('license')[0], 'MIT')
   assert.equal(
